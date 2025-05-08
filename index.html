@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +11,6 @@
             padding: 20px;
             background-color: #f5f5f5;
         }
-        
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -21,59 +19,48 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        
         h1 {
             text-align: center;
             color: #003366;
         }
-        
         .form-section {
             margin-bottom: 20px;
             padding: 15px;
             background-color: #f9f9f9;
             border-radius: 5px;
         }
-        
         .section-title {
             margin-top: 0;
             color: #003366;
             border-bottom: 1px solid #ddd;
             padding-bottom: 10px;
         }
-        
         .form-row {
             display: flex;
             flex-wrap: wrap;
             margin-bottom: 10px;
         }
-        
         .form-group {
             flex: 1 1 300px;
             margin-right: 15px;
             margin-bottom: 10px;
         }
-        
         label {
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
         }
-        
-        input,
-        select,
-        textarea {
+        input, select, textarea {
             width: 100%;
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
             box-sizing: border-box;
         }
-        
         textarea {
             height: 100px;
             resize: vertical;
         }
-        
         button {
             background-color: #003366;
             color: white;
@@ -83,16 +70,13 @@
             cursor: pointer;
             font-size: 16px;
         }
-        
         button:hover {
             background-color: #00264d;
         }
-        
         .buttons {
             text-align: center;
             margin-top: 20px;
         }
-        
         .report-output {
             margin-top: 30px;
             border: 1px solid #ddd;
@@ -100,18 +84,104 @@
             background-color: #fff;
             border-radius: 5px;
             white-space: pre-wrap;
-        }
-        
-        .hidden {
             display: none;
         }
         
+        .document-preview {
+            margin-top: 30px;
+            border: 1px solid #000;
+            background-color: #fff;
+            width: 100%;
+            min-height: 800px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .document-header {
+            text-align: center;
+            padding: 20px;
+            border-bottom: 2px solid #000;
+            position: relative;
+        }
+        
+        .document-header img {
+            height: 80px;
+            position: absolute;
+            left: 20px;
+            top: 20px;
+        }
+        
+        .document-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 0;
+            padding-top: 10px;
+        }
+        
+        .document-subtitle {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        
+        .document-body {
+            padding: 20px 40px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .section {
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-weight: bold;
+            font-size: 16px;
+            border-bottom: 1px solid #000;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .field-row {
+            display: flex;
+            margin-bottom: 5px;
+        }
+        
+        .field-label {
+            font-weight: bold;
+            width: 35%;
+            padding-right: 10px;
+        }
+        
+        .field-value {
+            width: 65%;
+        }
+        
+        .signature-section {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .signature-box {
+            width: 45%;
+        }
+        
+        .signature-line {
+            border-top: 1px solid #000;
+            margin-top: 50px;
+            padding-top: 5px;
+            text-align: center;
+        }
+        .hidden {
+            display: none;
+        }
         @media print {
             .no-print {
                 display: none;
             }
-            body,
-            .container {
+            body, .container {
                 margin: 0;
                 padding: 0;
                 background-color: white;
@@ -123,11 +193,10 @@
         }
     </style>
 </head>
-
 <body>
     <div class="container">
         <h1>Генератор полицейских отчетов</h1>
-
+        
         <div class="form-section">
             <h2 class="section-title">Общая информация</h2>
             <div class="form-row">
@@ -286,11 +355,115 @@
 
         <div class="buttons no-print">
             <button type="button" id="generateReport">Сгенерировать отчет</button>
-            <button type="button" id="printReport" class="hidden">Печать</button>
+            <button type="button" id="printReport" class="hidden">Экспорт в PDF / Печать</button>
             <button type="button" id="resetForm">Очистить форму</button>
         </div>
 
         <div class="report-output hidden" id="reportOutput"></div>
+        
+        <div class="document-preview hidden" id="documentPreview">
+            <div class="document-header">
+                <img src="/api/placeholder/100/80" alt="Герб МВД" />
+                <h1 class="document-title">ГОСУДАРСТВЕННОЕ ВЕДОМСТВО ПОЛИЦЕЙСКОЙ СЛУЖБЫ</h1>
+                <h2 class="document-subtitle" id="departmentHeader"></h2>
+                <h2 class="document-subtitle">ОТЧЕТ О ПРОИСШЕСТВИИ</h2>
+                <h3 class="document-subtitle" id="reportNumberHeader"></h3>
+            </div>
+            <div class="document-body">
+                <div class="section">
+                    <h3 class="section-title">ИНФОРМАЦИЯ О СОТРУДНИКЕ</h3>
+                    <div class="field-row">
+                        <div class="field-label">Составитель отчета:</div>
+                        <div class="field-value" id="officerInfo"></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-label">Номер жетона:</div>
+                        <div class="field-value" id="badgeInfo"></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-label">Дата и время составления:</div>
+                        <div class="field-value" id="reportDateTimeInfo"></div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">ИНФОРМАЦИЯ О ПРОИСШЕСТВИИ</h3>
+                    <div class="field-row">
+                        <div class="field-label">Тип происшествия:</div>
+                        <div class="field-value" id="incidentTypeInfo"></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-label">Дата и время:</div>
+                        <div class="field-value" id="incidentDateTimeInfo"></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-label">Место:</div>
+                        <div class="field-value" id="incidentLocationInfo"></div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">ОПИСАНИЕ ПРОИСШЕСТВИЯ</h3>
+                    <div id="incidentDescriptionInfo" style="text-align: justify;"></div>
+                </div>
+                
+                <div class="section">
+                    <h3 class="section-title">ИНФОРМАЦИЯ О ЗАЯВИТЕЛЕ</h3>
+                    <div class="field-row">
+                        <div class="field-label">ФИО:</div>
+                        <div class="field-value" id="reporterNameInfo"></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-label">Дата рождения:</div>
+                        <div class="field-value" id="reporterBirthDateInfo"></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-label">Контактный телефон:</div>
+                        <div class="field-value" id="reporterPhoneInfo"></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-label">Email:</div>
+                        <div class="field-value" id="reporterEmailInfo"></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-label">Адрес проживания:</div>
+                        <div class="field-value" id="reporterAddressInfo"></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-label">Паспортные данные:</div>
+                        <div class="field-value" id="reporterPassportInfo"></div>
+                    </div>
+                </div>
+                
+                <div class="section" id="witnessesSection">
+                    <h3 class="section-title">СВИДЕТЕЛИ</h3>
+                    <div id="witnessesInfo"></div>
+                </div>
+                
+                <div class="section" id="evidenceSection">
+                    <h3 class="section-title">СОБРАННЫЕ ДОКАЗАТЕЛЬСТВА</h3>
+                    <div id="evidenceInfo"></div>
+                </div>
+                
+                <div class="section" id="notesSection">
+                    <h3 class="section-title">ДОПОЛНИТЕЛЬНЫЕ ЗАМЕТКИ</h3>
+                    <div id="notesInfo"></div>
+                </div>
+                
+                <div class="signature-section">
+                    <div class="signature-box">
+                        <div class="signature-line">
+                            <span id="officerSignature"></span>
+                        </div>
+                    </div>
+                    <div class="signature-box">
+                        <div class="signature-line">
+                            <span id="reporterSignature"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -301,7 +474,7 @@
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const currentTime = `${hours}:${minutes}`;
-
+            
             document.getElementById('reportDate').value = currentDate;
             document.getElementById('reportTime').value = currentTime;
             document.getElementById('incidentDate').value = currentDate;
@@ -311,7 +484,7 @@
             document.getElementById('generateReport').addEventListener('click', function() {
                 let isValid = true;
                 const requiredFields = document.querySelectorAll('[required]');
-
+                
                 requiredFields.forEach(field => {
                     if (!field.value) {
                         isValid = false;
@@ -341,14 +514,14 @@
                 const reporterName = document.getElementById('reporterName').value;
                 const reporterBirthDate = formatDate(document.getElementById('reporterBirthDate').value);
                 const reporterPhone = document.getElementById('reporterPhone').value;
-                const reporterEmail = document.getElementById('reporterEmail').value;
+                const reporterEmail = document.getElementById('reporterEmail').value || "Не указан";
                 const reporterAddress = document.getElementById('reporterAddress').value;
                 const reporterPassport = document.getElementById('reporterPassport').value;
                 const witnesses = document.getElementById('witnesses').value;
                 const evidence = document.getElementById('evidence').value;
                 const notes = document.getElementById('notes').value;
 
-                // Генерация текста отчета
+                // Генерация текста отчета (для резервного вывода)
                 let reportText = `
 ОТЧЕТ О ПРОИСШЕСТВИИ № ${reportNumber}
 Дата составления: ${reportDate}, Время: ${reportTime}
@@ -371,7 +544,7 @@ ${incidentDescription}
 ФИО: ${reporterName}
 Дата рождения: ${reporterBirthDate}
 Контактный телефон: ${reporterPhone}
-Email: ${reporterEmail || "Не указан"}
+Email: ${reporterEmail}
 Адрес проживания: ${reporterAddress}
 Паспортные данные: ${reporterPassport}
 
@@ -406,9 +579,55 @@ ${notes}
 Подпись заявителя: ________________ / ${reporterName} /
 `;
 
+                // Сохраняем текстовый отчет в скрытом элементе
                 const reportOutput = document.getElementById('reportOutput');
                 reportOutput.textContent = reportText;
-                reportOutput.classList.remove('hidden');
+                
+                // Заполняем визуальный документ
+                document.getElementById('departmentHeader').textContent = department;
+                document.getElementById('reportNumberHeader').textContent = `№ ${reportNumber}`;
+                document.getElementById('officerInfo').textContent = `${officerRank} ${officerName}`;
+                document.getElementById('badgeInfo').textContent = officerBadge;
+                document.getElementById('reportDateTimeInfo').textContent = `${reportDate}, ${reportTime}`;
+                document.getElementById('incidentTypeInfo').textContent = incidentType;
+                document.getElementById('incidentDateTimeInfo').textContent = `${incidentDate}, ${incidentTime}`;
+                document.getElementById('incidentLocationInfo').textContent = incidentLocation;
+                document.getElementById('incidentDescriptionInfo').textContent = incidentDescription;
+                document.getElementById('reporterNameInfo').textContent = reporterName;
+                document.getElementById('reporterBirthDateInfo').textContent = reporterBirthDate;
+                document.getElementById('reporterPhoneInfo').textContent = reporterPhone;
+                document.getElementById('reporterEmailInfo').textContent = reporterEmail;
+                document.getElementById('reporterAddressInfo').textContent = reporterAddress;
+                document.getElementById('reporterPassportInfo').textContent = reporterPassport;
+                
+                // Заполняем дополнительные секции если они есть
+                if (witnesses) {
+                    document.getElementById('witnessesInfo').textContent = witnesses;
+                    document.getElementById('witnessesSection').style.display = 'block';
+                } else {
+                    document.getElementById('witnessesSection').style.display = 'none';
+                }
+                
+                if (evidence) {
+                    document.getElementById('evidenceInfo').textContent = evidence;
+                    document.getElementById('evidenceSection').style.display = 'block';
+                } else {
+                    document.getElementById('evidenceSection').style.display = 'none';
+                }
+                
+                if (notes) {
+                    document.getElementById('notesInfo').textContent = notes;
+                    document.getElementById('notesSection').style.display = 'block';
+                } else {
+                    document.getElementById('notesSection').style.display = 'none';
+                }
+                
+                // Подписи
+                document.getElementById('officerSignature').textContent = `${officerRank} ${officerName}`;
+                document.getElementById('reporterSignature').textContent = reporterName;
+                
+                // Показываем документ и кнопку печати
+                document.getElementById('documentPreview').classList.remove('hidden');
                 document.getElementById('printReport').classList.remove('hidden');
             });
 
@@ -421,7 +640,7 @@ ${notes}
 
             // Функция печати отчета
             document.getElementById('printReport').addEventListener('click', function() {
-                window.print();
+                exportToPDF();
             });
 
             // Функция очистки формы
@@ -431,17 +650,25 @@ ${notes}
                     field.value = '';
                     field.style.borderColor = '#ddd';
                 });
-
+                
                 document.getElementById('reportDate').value = currentDate;
                 document.getElementById('reportTime').value = currentTime;
                 document.getElementById('incidentDate').value = currentDate;
                 document.getElementById('incidentTime').value = currentTime;
-
+                
                 document.getElementById('reportOutput').classList.add('hidden');
+                document.getElementById('documentPreview').classList.add('hidden');
                 document.getElementById('printReport').classList.add('hidden');
             });
+            
+            // Функция для экспорта в PDF (имитация, фактически просто печать)
+            function exportToPDF() {
+                // В браузерном окружении без дополнительных библиотек 
+                // мы можем использовать встроенную функцию печати, 
+                // которая позволяет сохранить как PDF
+                window.print();
+            }
         });
     </script>
 </body>
-
 </html>
