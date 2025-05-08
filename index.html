@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор полицейских отчетов</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #003366;
+        }
+        
+        .form-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        
+        .section-title {
+            margin-top: 0;
+            color: #003366;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+        
+        .form-group {
+            flex: 1 1 300px;
+            margin-right: 15px;
+            margin-bottom: 10px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        button {
+            background-color: #003366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        button:hover {
+            background-color: #00264d;
+        }
+        
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .report-output {
+            margin-top: 30px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media print {
+            .no-print {
+                display: none;
+            }
+            body,
+            .container {
+                margin: 0;
+                padding: 0;
+                background-color: white;
+                box-shadow: none;
+            }
+            .report-output {
+                border: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Генератор полицейских отчетов</h1>
+
+        <div class="form-section">
+            <h2 class="section-title">Общая информация</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="reportDate">Дата отчета</label>
+                    <input type="date" id="reportDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="reportTime">Время отчета</label>
+                    <input type="time" id="reportTime" required>
+                </div>
+                <div class="form-group">
+                    <label for="reportNumber">Номер отчета</label>
+                    <input type="text" id="reportNumber" placeholder="Например: 2025/05/123" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="officerName">ФИО сотрудника</label>
+                    <input type="text" id="officerName" placeholder="Иванов Иван Иванович" required>
+                </div>
+                <div class="form-group">
+                    <label for="officerRank">Звание</label>
+                    <select id="officerRank" required>
+                        <option value="">Выберите звание</option>
+                        <option value="Рядовой полиции">Рядовой полиции</option>
+                        <option value="Младший сержант полиции">Младший сержант полиции</option>
+                        <option value="Сержант полиции">Сержант полиции</option>
+                        <option value="Старший сержант полиции">Старший сержант полиции</option>
+                        <option value="Старшина полиции">Старшина полиции</option>
+                        <option value="Прапорщик полиции">Прапорщик полиции</option>
+                        <option value="Старший прапорщик полиции">Старший прапорщик полиции</option>
+                        <option value="Младший лейтенант полиции">Младший лейтенант полиции</option>
+                        <option value="Лейтенант полиции">Лейтенант полиции</option>
+                        <option value="Старший лейтенант полиции">Старший лейтенант полиции</option>
+                        <option value="Капитан полиции">Капитан полиции</option>
+                        <option value="Майор полиции">Майор полиции</option>
+                        <option value="Подполковник полиции">Подполковник полиции</option>
+                        <option value="Полковник полиции">Полковник полиции</option>
+                        <option value="Генерал-майор полиции">Генерал-майор полиции</option>
+                        <option value="Генерал-лейтенант полиции">Генерал-лейтенант полиции</option>
+                        <option value="Генерал-полковник полиции">Генерал-полковник полиции</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="officerBadge">Номер жетона</label>
+                    <input type="text" id="officerBadge" placeholder="Например: 123456" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="department">Отдел</label>
+                    <input type="text" id="department" placeholder="Например: УМВД России по г. Москве" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2 class="section-title">Информация о происшествии</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="incidentDate">Дата происшествия</label>
+                    <input type="date" id="incidentDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="incidentTime">Время происшествия</label>
+                    <input type="time" id="incidentTime" required>
+                </div>
+                <div class="form-group">
+                    <label for="incidentType">Тип происшествия</label>
+                    <select id="incidentType" required>
+                        <option value="">Выберите тип происшествия</option>
+                        <option value="Кража">Кража</option>
+                        <option value="Грабеж">Грабеж</option>
+                        <option value="Разбой">Разбой</option>
+                        <option value="Нападение">Нападение</option>
+                        <option value="Мошенничество">Мошенничество</option>
+                        <option value="Вандализм">Вандализм</option>
+                        <option value="Нарушение общественного порядка">Нарушение общественного порядка</option>
+                        <option value="ДТП">ДТП</option>
+                        <option value="Другое">Другое</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="incidentLocation">Место происшествия</label>
+                    <input type="text" id="incidentLocation" placeholder="Полный адрес места происшествия" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="incidentDescription">Подробное описание происшествия</label>
+                    <textarea id="incidentDescription" placeholder="Укажите все важные детали происшествия" required></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2 class="section-title">Информация о заявителе</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="reporterName">ФИО заявителя</label>
+                    <input type="text" id="reporterName" placeholder="Петров Петр Петрович" required>
+                </div>
+                <div class="form-group">
+                    <label for="reporterBirthDate">Дата рождения</label>
+                    <input type="date" id="reporterBirthDate" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="reporterPhone">Телефон</label>
+                    <input type="tel" id="reporterPhone" placeholder="+7 (XXX) XXX-XX-XX" required>
+                </div>
+                <div class="form-group">
+                    <label for="reporterEmail">Email</label>
+                    <input type="email" id="reporterEmail" placeholder="example@mail.ru">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="reporterAddress">Адрес проживания</label>
+                    <input type="text" id="reporterAddress" placeholder="Полный адрес проживания" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="reporterPassport">Паспортные данные</label>
+                    <input type="text" id="reporterPassport" placeholder="Серия и номер паспорта" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2 class="section-title">Дополнительная информация</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="witnesses">Свидетели (если есть)</label>
+                    <textarea id="witnesses" placeholder="ФИО, контактные данные свидетелей"></textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="evidence">Собранные доказательства</label>
+                    <textarea id="evidence" placeholder="Перечислите все собранные доказательства (фото, видео, показания и т.д.)"></textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="notes">Дополнительные заметки</label>
+                    <textarea id="notes" placeholder="Дополнительная информация, которая может быть важна для расследования"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="buttons no-print">
+            <button type="button" id="generateReport">Сгенерировать отчет</button>
+            <button type="button" id="printReport" class="hidden">Печать</button>
+            <button type="button" id="resetForm">Очистить форму</button>
+        </div>
+
+        <div class="report-output hidden" id="reportOutput"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Установка текущей даты и времени
+            const now = new Date();
+            const currentDate = now.toISOString().split('T')[0];
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const currentTime = `${hours}:${minutes}`;
+
+            document.getElementById('reportDate').value = currentDate;
+            document.getElementById('reportTime').value = currentTime;
+            document.getElementById('incidentDate').value = currentDate;
+            document.getElementById('incidentTime').value = currentTime;
+
+            // Функция для генерации отчета
+            document.getElementById('generateReport').addEventListener('click', function() {
+                let isValid = true;
+                const requiredFields = document.querySelectorAll('[required]');
+
+                requiredFields.forEach(field => {
+                    if (!field.value) {
+                        isValid = false;
+                        field.style.borderColor = 'red';
+                    } else {
+                        field.style.borderColor = '#ddd';
+                    }
+                });
+
+                if (!isValid) {
+                    alert('Пожалуйста, заполните все обязательные поля');
+                    return;
+                }
+
+                const reportDate = formatDate(document.getElementById('reportDate').value);
+                const reportTime = document.getElementById('reportTime').value;
+                const reportNumber = document.getElementById('reportNumber').value;
+                const officerName = document.getElementById('officerName').value;
+                const officerRank = document.getElementById('officerRank').value;
+                const officerBadge = document.getElementById('officerBadge').value;
+                const department = document.getElementById('department').value;
+                const incidentDate = formatDate(document.getElementById('incidentDate').value);
+                const incidentTime = document.getElementById('incidentTime').value;
+                const incidentType = document.getElementById('incidentType').value;
+                const incidentLocation = document.getElementById('incidentLocation').value;
+                const incidentDescription = document.getElementById('incidentDescription').value;
+                const reporterName = document.getElementById('reporterName').value;
+                const reporterBirthDate = formatDate(document.getElementById('reporterBirthDate').value);
+                const reporterPhone = document.getElementById('reporterPhone').value;
+                const reporterEmail = document.getElementById('reporterEmail').value;
+                const reporterAddress = document.getElementById('reporterAddress').value;
+                const reporterPassport = document.getElementById('reporterPassport').value;
+                const witnesses = document.getElementById('witnesses').value;
+                const evidence = document.getElementById('evidence').value;
+                const notes = document.getElementById('notes').value;
+
+                // Генерация текста отчета
+                let reportText = `
+ОТЧЕТ О ПРОИСШЕСТВИИ № ${reportNumber}
+Дата составления: ${reportDate}, Время: ${reportTime}
+
+Отдел: ${department}
+
+ИНФОРМАЦИЯ О СОТРУДНИКЕ:
+Составитель отчета: ${officerRank} ${officerName}
+Номер жетона: ${officerBadge}
+
+ИНФОРМАЦИЯ О ПРОИСШЕСТВИИ:
+Тип происшествия: ${incidentType}
+Дата: ${incidentDate}, Время: ${incidentTime}
+Место: ${incidentLocation}
+
+ОПИСАНИЕ ПРОИСШЕСТВИЯ:
+${incidentDescription}
+
+ИНФОРМАЦИЯ О ЗАЯВИТЕЛЕ:
+ФИО: ${reporterName}
+Дата рождения: ${reporterBirthDate}
+Контактный телефон: ${reporterPhone}
+Email: ${reporterEmail || "Не указан"}
+Адрес проживания: ${reporterAddress}
+Паспортные данные: ${reporterPassport}
+
+`;
+
+                if (witnesses) {
+                    reportText += `СВИДЕТЕЛИ:
+${witnesses}
+
+`;
+                }
+
+                if (evidence) {
+                    reportText += `СОБРАННЫЕ ДОКАЗАТЕЛЬСТВА:
+${evidence}
+
+`;
+                }
+
+                if (notes) {
+                    reportText += `ДОПОЛНИТЕЛЬНЫЕ ЗАМЕТКИ:
+${notes}
+
+`;
+                }
+
+                reportText += `
+Отчет составлен: ${reportDate}, ${reportTime}
+
+Подпись сотрудника: ________________ / ${officerName} /
+
+Подпись заявителя: ________________ / ${reporterName} /
+`;
+
+                const reportOutput = document.getElementById('reportOutput');
+                reportOutput.textContent = reportText;
+                reportOutput.classList.remove('hidden');
+                document.getElementById('printReport').classList.remove('hidden');
+            });
+
+            // Функция форматирования даты из yyyy-mm-dd в dd.mm.yyyy
+            function formatDate(dateString) {
+                if (!dateString) return '';
+                const [year, month, day] = dateString.split('-');
+                return `${day}.${month}.${year}`;
+            }
+
+            // Функция печати отчета
+            document.getElementById('printReport').addEventListener('click', function() {
+                window.print();
+            });
+
+            // Функция очистки формы
+            document.getElementById('resetForm').addEventListener('click', function() {
+                const form = document.querySelectorAll('input, textarea, select');
+                form.forEach(field => {
+                    field.value = '';
+                    field.style.borderColor = '#ddd';
+                });
+
+                document.getElementById('reportDate').value = currentDate;
+                document.getElementById('reportTime').value = currentTime;
+                document.getElementById('incidentDate').value = currentDate;
+                document.getElementById('incidentTime').value = currentTime;
+
+                document.getElementById('reportOutput').classList.add('hidden');
+                document.getElementById('printReport').classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+
+</html>
